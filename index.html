@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Разбор конфликтной ситуации</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+    :root {
+      --ink: #172033;
+      --muted: #596579;
+      --surface: #ffffff;
+      --background: #ffffff;
+      --panel: #f4f7fb;
+      --border: #d9e1ec;
+      --accent: #42a1a5;
+      --accent-soft: #e6f4f4;
+      --focus: #ff9e1b;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+      background: var(--background);
+    }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: start center;
+      padding: 32px 20px;
+      color: var(--ink);
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: 18px;
+    }
+
+    .interactive {
+      width: min(960px, 100%);
+      padding: clamp(24px, 5vw, 48px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: var(--surface);
+      box-shadow: 0 16px 36px rgba(23, 32, 51, .12);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .step,
+    .substep {
+      border: 2px solid var(--accent);
+      border-radius: 18px;
+      color: #ffffff;
+      background: var(--accent);
+      text-align: left;
+      cursor: pointer;
+      font: inherit;
+      font-size: 18px;
+      transition: box-shadow .2s ease, transform .2s ease;
+    }
+
+    .step {
+      min-height: 146px;
+      padding: 22px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .step:hover,
+    .substep:hover,
+    .step.is-active,
+    .substep.is-active {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(66, 161, 165, .30);
+    }
+
+    .step:focus-visible,
+    .substep:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .panel {
+      min-height: 230px;
+      margin-top: 28px;
+      padding: clamp(22px, 4vw, 36px);
+      border-radius: 18px;
+      background: var(--panel);
+    }
+
+    .placeholder {
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .content[hidden],
+    .nested-content[hidden] { display: none; }
+
+    .content,
+    .nested-content { animation: appear .25s ease-out; }
+
+    .content h2,
+    .nested-content h3 {
+      margin: 0 0 14px;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .description {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    .substeps {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .substep {
+      min-height: 98px;
+      padding: 16px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .nested-content {
+      margin-top: 22px;
+      padding: 22px;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 12px 12px 0;
+      background: var(--surface);
+    }
+
+    .nested-content h3 { font-size: 18px; }
+    .nested-content p { margin: 0; font-size: 18px; line-height: 1.55; }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 700px) {
+      .steps,
+      .substeps { grid-template-columns: 1fr; }
+      .step { min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main class="interactive">
+    <section class="steps" aria-label="Шаги разбора конфликтной ситуации">
+      <button class="step" type="button" data-step="problem" aria-controls="content" aria-pressed="false">
+        1. Сформулируй проблему одним предложением, опираясь на факты
+      </button>
+      <button class="step" type="button" data-step="factors" aria-controls="content" aria-pressed="false">
+        2. Раздели факторы на две группы
+      </button>
+    </section>
+
+    <section class="panel" id="content" aria-live="polite">
+      <p class="placeholder" id="placeholder"><em>Кликай на вкладки, чтобы узнать подробнее</em></p>
+
+      <article class="content" data-content="problem" hidden>
+        <p class="description">Два ключевых сотрудника конфликтуют: на встречах переходят на личности, решения буксуют, команда делится на «лагеря». За последние две недели сорваны два дедлайна и выросло число переделок.</p>
+      </article>
+
+      <article class="content" data-content="factors" hidden>
+        <p class="description">«Могу влиять» и «Не могу влиять напрямую». Это поможет отделить зону действий<br>от того, что требует адаптации.</p>
+
+        <div class="substeps" aria-label="Действия для зон влияния">
+          <button class="substep" type="button" data-substep="adapt" aria-controls="nested-content" aria-pressed="false">
+            Не могу влиять напрямую
+          </button>
+          <button class="substep" type="button" data-substep="influence" aria-controls="nested-content" aria-pressed="false">
+            Могу влиять
+          </button>
+        </div>
+
+        <section id="nested-content" aria-live="polite">
+          <article class="nested-content" data-nested-content="adapt" hidden>
+            <h3>Для зоны «Не могу влиять напрямую»</h3>
+            <p>Выбери шаг адаптации. Руководитель не может изменить характеры, прошлый опыт и личную совместимость сотрудников, но может снизить их влияние<br>на результат: установить правила взаимодействия, чётко распределить роли, определить порядок принятия решений и фиксировать договорённости.</p>
+          </article>
+
+          <article class="nested-content" data-nested-content="influence" hidden>
+            <h3>Для зоны «Могу влиять»</h3>
+            <p>Определи действия на ближайшие 48 часов. В первые 24 часа провести отдельные 1:1: собрать факты и договориться с каждым о конкретных правилах поведения в обсуждениях. Затем организовать совместную встречу: ввести регламент разрешения конфликтов, назначить ответственного за финальное решение и зафиксировать порядок эскалации.</p>
+          </article>
+        </section>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const steps = document.querySelectorAll('.step');
+    const contents = document.querySelectorAll('.content');
+    const placeholder = document.getElementById('placeholder');
+    const substeps = document.querySelectorAll('.substep');
+    const nestedContents = document.querySelectorAll('.nested-content');
+
+    function resetNestedContent() {
+      substeps.forEach((button) => {
+        button.classList.remove('is-active');
+        button.setAttribute('aria-pressed', 'false');
+      });
+      nestedContents.forEach((content) => { content.hidden = true; });
+    }
+
+    function showStep(step) {
+      steps.forEach((button) => {
+        const active = button.dataset.step === step;
+        button.classList.toggle('is-active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+
+      contents.forEach((content) => {
+        content.hidden = content.dataset.content !== step;
+      });
+
+      placeholder.hidden = true;
+      resetNestedContent();
+    }
+
+    function showNestedStep(step) {
+      substeps.forEach((button) => {
+        const active = button.dataset.substep === step;
+        button.classList.toggle('is-active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+
+      nestedContents.forEach((content) => {
+        content.hidden = content.dataset.nestedContent !== step;
+      });
+    }
+
+    steps.forEach((button) => {
+      button.addEventListener('click', () => showStep(button.dataset.step));
+    });
+
+    substeps.forEach((button) => {
+      button.addEventListener('click', () => showNestedStep(button.dataset.substep));
+    });
+  </script>
+</body>
+</html>
